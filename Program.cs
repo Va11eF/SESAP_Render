@@ -91,21 +91,21 @@ app.MapPost("api/v1/interviews", async (ICapstoneRepo repo, IMapper mapper, Inte
 
     string baseDirectory = Directory.GetCurrentDirectory();
 
-
+    Console.WriteLine("[DEBUG] Starting the Python populateDatabase script");
 
     // Run populateDatabase.py
     var populateScript = Path.Combine(baseDirectory, "populateDatabase.py");
     var result1 = await runPythonScript(populateScript, baseDirectory);
     if (result1 is not null) return result1;
 
-
+    Console.WriteLine("[DEBUG] Starting the Python QueryAll script");
 
     // Run queryAll.py
     var queryScript = Path.Combine(baseDirectory, "queryAll.py");
     var result2 = await runPythonScript(queryScript, baseDirectory);
     if (result2 is not null) return result2;
 
-
+    Console.WriteLine("[DEBUG] Starting the Python generateCharts script");
 
     // Run generateCharts.py
     var chartScript = Path.Combine(baseDirectory, "generateCharts.py");
