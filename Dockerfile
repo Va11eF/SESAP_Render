@@ -1,15 +1,14 @@
-# Stage 1: Build .NET backend (Narratives functionality)
+# Stage 1: Build .NET backend
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy entire backend source and solution
 COPY CapstoneController.sln ./
 COPY . ./
 
 RUN dotnet restore
 RUN dotnet publish CapstoneController.csproj -c Release -o /out
 
-# Stage 2: Build & run everything
+# Stage 2: Build and run everything
 FROM node:18-slim
 
 # Install Python, curl, and .NET runtime
@@ -22,20 +21,19 @@ RUN apt-get update && \
     apt-get install -y aspnetcore-runtime-8.0 && \
     rm -rf /var/lib/apt/lists/*
 
-# Set workdir
 WORKDIR /app
 
 # Copy and install Node dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy all source files (frontend + backend + scripts)
+# Copy entire source
 COPY . .
 
-# Build Vite frontend (outputs to /app/dist)
+# Build frontend
 RUN npm run build
 
-# Setup Python venv and install dependencies
+# Set up Python environment
 RUN python3 -m venv /opt/venv && \
     . /opt/venv/bin/activate && \
     /opt/venv/bin/pip install --upgrade pip && \
@@ -43,11 +41,9 @@ RUN python3 -m venv /opt/venv && \
 
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Copy .NET publish output
+# Copy .NET publish output to known location
 COPY --from=build /out ./dotnet
 
-# Expose app port
 EXPOSE 5000
 
-# Start the main server
 CMD ["./start.sh"]
