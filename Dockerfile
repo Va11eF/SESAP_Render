@@ -1,54 +1,43 @@
-# Stage 1: Build .NET app
+# Stage 1: Build .NET backend (Narratives functionality)
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
 
-WORKDIR /app
-
-# Copy solution and projects
+# Copy solution and project files
 COPY CapstoneController.sln ./
-COPY CapstoneController/*.csproj ./CapstoneController/
-COPY CapstoneController/. ./CapstoneController/
+COPY CapstoneController.csproj ./
+COPY . ./
 
-# Restore and build
-RUN dotnet restore CapstoneController/CapstoneController.csproj
-RUN dotnet publish CapstoneController/CapstoneController.csproj -c Release -o /app/out
+RUN dotnet restore
+RUN dotnet build -c Release -o /out
+RUN dotnet publish -c Release -o /out
 
-# Stage 2: Runtime + Node.js + Python
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+# Stage 2: Build & run everything
+FROM node:18-slim
 
-# Install Node.js (LTS), Python, pip, and venv
+# Install Python and .NET runtime
 RUN apt-get update && \
-    apt-get install -y curl python3 python3-pip python3-venv && \
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get install -y nodejs && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+    apt-get install -y python3 python3-pip python3-venv curl gnupg && \
+    curl -sSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg && \
+    install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/ && \
+    sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/debian/11/prod bullseye main" > /etc/apt/sources.list.d/microsoft.list' && \
+    apt-get update && \
+    apt-get install -y aspnetcore-runtime-8.0 && \
+    rm -rf /var/lib/apt/lists/*
 
-# Set working directory
+# Set workdir
 WORKDIR /app
 
-# Copy published .NET app from build stage
-COPY --from=build /app/out ./out
-
-# Copy frontend and Python code
-COPY client ./client
-COPY requirements.txt .
-COPY scripts ./scripts
-COPY server.js .
-COPY start.sh .
-COPY uploads ./uploads
-
-# Build React frontend
-WORKDIR /app/client
+# Copy frontend/public-related files
+COPY package*.json ./
 RUN npm install
-RUN npm run build
 
-# Copy built React app into static files folder if needed
-# (depends on where your Express app looks — e.g., "client/build")
-# If you use Vite, adjust the static path accordingly
-# E.g., if using Vite's dist output:
-# RUN cp -r dist ../out/client
+# Copy source files
+COPY . .
+
+# Build frontend (assumes React source is in ./src and ./public)
+RUN npm run build || echo "No build step (vite dev-only setup)"
 
 # Python setup
-WORKDIR /app
 RUN python3 -m venv /opt/venv && \
     . /opt/venv/bin/activate && \
     /opt/venv/bin/pip install --upgrade pip && \
@@ -56,8 +45,11 @@ RUN python3 -m venv /opt/venv && \
 
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Optional: expose ports
+# Copy .NET output from build stage
+COPY --from=build /out ./dotnet
+
+# Default ports (adjust if needed)
 EXPOSE 5000 5084
 
-# Start app
-CMD ["./start.sh"]
+# Launch server.js as main entry point
+CMD ["node", "server.js"]
