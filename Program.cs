@@ -18,7 +18,10 @@ builder.Services.AddSwaggerGen();
 
 var sqlConBuilder = new MySqlConnector.MySqlConnection();
 
-sqlConBuilder.ConnectionString = builder.Configuration.GetConnectionString("AivenMySQL");
+var envConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+sqlConBuilder.ConnectionString = string.IsNullOrEmpty(envConnectionString)
+    ? builder.Configuration.GetConnectionString("AivenMySQL")
+    : envConnectionString;
 //sqlConBuilder.UserID = builder.Configuration["UserId"];
 //sqlConBuilder.Password = builder.Configuration["Password"];
 
