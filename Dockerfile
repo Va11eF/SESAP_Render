@@ -2,19 +2,17 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy solution and project files
+# Copy entire backend source and solution
 COPY CapstoneController.sln ./
-COPY CapstoneController.csproj ./
 COPY . ./
 
 RUN dotnet restore
-RUN dotnet build -c Release -o /out
-RUN dotnet publish -c Release -o /out
+RUN dotnet publish CapstoneController.csproj -c Release -o /out
 
 # Stage 2: Build & run everything
 FROM node:18-slim
 
-# Install Python and .NET runtime
+# Install Python, curl, and .NET runtime
 RUN apt-get update && \
     apt-get install -y python3 python3-pip python3-venv curl gnupg && \
     curl -sSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg && \
@@ -27,17 +25,17 @@ RUN apt-get update && \
 # Set workdir
 WORKDIR /app
 
-# Copy frontend/public-related files
+# Copy and install Node dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy source files
+# Copy all source files (frontend + backend + scripts)
 COPY . .
 
-# Build frontend (assumes React source is in ./src and ./public)
-RUN npm run build || echo "No build step (vite dev-only setup)"
+# Build Vite frontend (outputs to /app/dist)
+RUN npm run build
 
-# Python setup
+# Setup Python venv and install dependencies
 RUN python3 -m venv /opt/venv && \
     . /opt/venv/bin/activate && \
     /opt/venv/bin/pip install --upgrade pip && \
@@ -45,11 +43,11 @@ RUN python3 -m venv /opt/venv && \
 
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Copy .NET output from build stage
+# Copy .NET publish output
 COPY --from=build /out ./dotnet
 
-# Default ports (adjust if needed)
-EXPOSE 5000 5084
+# Expose app port
+EXPOSE 5000
 
-# Launch server.js as main entry point
-CMD ["node", "server.js"]
+# Start the main server
+CMD ["./start.sh"]

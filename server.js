@@ -176,16 +176,16 @@ app.get("/api/whitelist", async (req, res) => {
   }
 });
 
-// Serve static files from React build directory
-app.use(express.static(path.join(__dirname, "client/build")));
-
-// Catch-all: send back index.html for any unknown routes (React handles them)
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client/build", "index.html"));
-});
-
 // Start the server
 const PORT = process.env.PORT || 5000;
+
+// Serve static files from the Vite dist directory
+app.use(express.static(path.join(__dirname, "dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
