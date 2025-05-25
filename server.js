@@ -135,7 +135,7 @@ app.put("/api/narratives/:id/embed", async (req, res) => {
   }
 });
 
-app.post("/api/interviews", async (req, res) => {
+app.post("/proxy/api/interviews", async (req, res) => {
   try {
     console.log("Proxying request to interviews API");
     // Log the size to debug

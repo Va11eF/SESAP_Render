@@ -360,7 +360,7 @@ function NarrativePage() {
       console.log("Payload size:", JSON.stringify(interviewPayload).length / 1024, "KB");
   
       const response = await axios.post(
-        "/api/interviews", 
+        "/proxy/api/interviews", 
         interviewPayload
       );
       
