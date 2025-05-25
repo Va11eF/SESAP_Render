@@ -273,7 +273,6 @@ function NarrativePage() {
   ////////
   const [userEmail, setUserEmail] = useState(null);
   const [whitelistEmails, setWhitelistEmails] = useState([]); // store emails here
-  const whitelist = ["vallefe@oregonstate.edu"]; 
 
   // Decode JWT and set user email
   useEffect(() => {
@@ -361,7 +360,7 @@ function NarrativePage() {
       console.log("Payload size:", JSON.stringify(interviewPayload).length / 1024, "KB");
   
       const response = await axios.post(
-        "/proxy/api/interviews", 
+        "/api/interviews", 
         interviewPayload
       );
       
