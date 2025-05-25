@@ -1,3 +1,12 @@
+/*
+**   Program.cs
+
+*    Main file of the dotnet minimal api microcontroller
+*    Builds the api, connects to the database, and provides routing capabilities 
+*    and middleware for all of the endpoints. Also uses processes to run python scripts
+*    to reach the LLM
+*/
+
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql;
@@ -10,6 +19,7 @@ using System.Diagnostics;
 using System.Text.Json;
 
 
+/* Creats a builder object and populates required parameters such as database connection and establishes the repository */
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +51,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+/* Runs a python script given a script path (filename) and the working directory for output */
 async Task<IResult?> runPythonScript(string scriptPath, string workingDirectory)
 {
     var startInfo = new ProcessStartInfo
