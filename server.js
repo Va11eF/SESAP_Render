@@ -32,7 +32,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 
-const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:5084";
+const BACKEND_URL = process.env.BACKEND_URL || "http://0.0.0.0:5084";
 
 // Serve static files from the "uploads" directory
 app.use("/uploads", express.static(uploadsDir));
