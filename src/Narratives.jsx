@@ -293,7 +293,7 @@ function NarrativePage() {
   useEffect(() => {
     const fetchWhitelist = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/whitelist");
+        const response = await axios.get("/api/whitelist");
         // Assuming response.data = array of { email: "user@example.com", ... }
         const emails = response.data.map(user => user.email.toLowerCase());
         setWhitelistEmails(emails);
@@ -314,7 +314,7 @@ function NarrativePage() {
 
   const fetchNarratives = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/narratives");
+      const response = await axios.get("/api/narratives");
       setNarratives(response.data);
     } catch (error) {
       console.error("Error fetching narratives:", error);
@@ -361,7 +361,7 @@ function NarrativePage() {
       console.log("Payload size:", JSON.stringify(interviewPayload).length / 1024, "KB");
   
       const response = await axios.post(
-        "http://localhost:5000/proxy/api/interviews", 
+        "/proxy/api/interviews", 
         interviewPayload
       );
       
