@@ -112,7 +112,7 @@ function Root() {
 
             try {
                 window.google.accounts.id.initialize({
-                    client_id: '493685022379-tiuah4qh7n2v2hqocvhec2k2p64ct9vp.apps.googleusercontent.com',
+                    client_id: '530434203256-ebet6n08d0gei9avhnjmtcrarhgmc8a5.apps.googleusercontent.com',
                     callback: handleGoogleSignIn,
                     auto_select: false,
                     cancel_on_tap_outside: true,
