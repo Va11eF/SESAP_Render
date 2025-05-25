@@ -68,38 +68,38 @@ app.get("/api/narratives/:id", async (req, res) => {
 });
 
 // Add a new narrative (you can still add new ones if needed)
-app.post("/api/narratives", upload.fields([{ name: "textFiles", maxCount: 10 }]), async (req, res) => {
-  try {
-    console.log("Request body:", req.body); 
-    console.log("Request files:", req.files); 
+// app.post("/api/narratives", upload.fields([{ name: "textFiles", maxCount: 10 }]), async (req, res) => {
+//   try {
+//     console.log("Request body:", req.body); 
+//     console.log("Request files:", req.files); 
 
-    let transcriptText = "";
-    if (req.files && req.files.textFiles && req.files.textFiles.length > 0) {
-      const filePath = req.files.textFiles[0].path;
-      transcriptText = fs.readFileSync(filePath, 'utf8');
-    }
+//     let transcriptText = "";
+//     if (req.files && req.files.textFiles && req.files.textFiles.length > 0) {
+//       const filePath = req.files.textFiles[0].path;
+//       transcriptText = fs.readFileSync(filePath, 'utf8');
+//     }
 
-    const newNarrative = {
-      intervieweeName: req.body.intervieweeName,
-      interviewerName: req.body.interviewerName,
-      interviewDate: req.body.interviewDate, 
-      interviewDesc: req.body.description, 
-      interviewEmbedLink: req.body.embedLinks || "", 
-      interviewTranscript: transcriptText || req.body.interviewTranscript || "" 
-    };
+//     const newNarrative = {
+//       intervieweeName: req.body.intervieweeName,
+//       interviewerName: req.body.interviewerName,
+//       interviewDate: req.body.interviewDate, 
+//       interviewDesc: req.body.description, 
+//       interviewEmbedLink: req.body.embedLinks || "", 
+//       interviewTranscript: transcriptText || req.body.interviewTranscript || "" 
+//     };
     
-    // Send data to external API
-    const response = await axios.post(
-      `${BACKEND_URL}/api/v1/interviews`,
-      newNarrative
-    );
+//     // Send data to external API
+//     const response = await axios.post(
+//       `${BACKEND_URL}/api/v1/interviews`,
+//       newNarrative
+//     );
     
-    res.status(201).json(response.data);
-  } catch (error) {
-    console.error("Error saving narrative:", error);
-    res.status(500).json({ error: "Failed to save narrative" });
-  }
-});
+//     res.status(201).json(response.data);
+//   } catch (error) {
+//     console.error("Error saving narrative:", error);
+//     res.status(500).json({ error: "Failed to save narrative" });
+//   }
+// });
 
 app.put("/api/narratives/:id/embed", async (req, res) => {
   const narrativeId = parseInt(req.params.id);
@@ -135,7 +135,7 @@ app.put("/api/narratives/:id/embed", async (req, res) => {
   }
 });
 
-app.post("/proxy/api/interviews", async (req, res) => {
+app.post("/api/interviews", async (req, res) => {
   try {
     console.log("Proxying request to interviews API");
     // Log the size to debug
