@@ -106,14 +106,14 @@ def configure():
 def openrouterEndpoint(prompt):
     # print(f"API Key: {os.getenv('apiKey')}")
     headers = {
-        "Authorization": f"Bearer {os.getenv('apiKey')}",
+        "Authorization": f"Bearer {os.getenv('apiKey')}", # API key from .env file 
         "Content-Type": "application/json",
     }
     payload = {
-        "model": "mistralai/mistral-7b-instruct:free",
+        "model": "mistralai/mistral-7b-instruct:free", #can be changed to any other model
         "messages": [{"role": "system", "content": "You are an AI assistant."},
                      {"role": "user", "content": prompt}],
-        "max_tokens": 500,
+    "max_tokens": 500, #adjust as needed
         "temperature": 0.7
     }
 

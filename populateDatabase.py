@@ -1,42 +1,31 @@
+# reference: 
+# https://github.com/pixegami/langchain-rag-tutorial
 import os
-import time
-import shutil
 from langchain_community.document_loaders import DirectoryLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.schema.document import Document
 from getEmbeddings import getEmbeddings
 from langchain_chroma import Chroma
+import shutil
 
-DATA_PATH = "./transcripts/"
+DATA_PATH = "./transcripts/" 
 CHROMA_PATH = "chroma"
+
+# if not os.path.exists(DATA_PATH):
+#     print(f"Directory {DATA_PATH} does not exist.")
 
 def main():
     try:
-        print("[INFO] Script started.", flush=True)
-        print(f"[INFO] Working directory: {os.getcwd()}", flush=True)
-
-        if not os.path.exists(DATA_PATH):
-            print(f"[ERROR] transcripts folder not found at {DATA_PATH}", flush=True)
-            return
-        else:
-            print(f"[INFO] transcripts directory found at: {DATA_PATH}", flush=True)
-
         documents = loadDocuments()
-        print(f"[INFO] Loaded {len(documents)} documents.", flush=True)
-
-        if not documents:
-            print("[WARN] No documents found in transcripts folder.", flush=True)
-            return
-
         chunks = splitDocuments(documents)
-        print(f"[INFO] Split documents into {len(chunks)} chunks.", flush=True)
-
         addToChroma(chunks)
-
-        print("[INFO] Script completed successfully.", flush=True)
-
+        # if documents:
+        #     print(documents[0])
+        # else:
+        #     print("No documents loaded.")
     except Exception as e:
-        print(f"[EXCEPTION] An error occurred: {e}", flush=True)
+        print(f"An error occurred: {e}")
+
 
 def loadDocuments():
     loader = DirectoryLoader(DATA_PATH, glob="**/*.docx")
@@ -53,30 +42,37 @@ def splitDocuments(documents: list[Document]):
     return textSplitter.split_documents(documents)
 
 def addToChroma(chunks: list[Document]):
+    #load existing database
     db = Chroma(
-        persist_directory=CHROMA_PATH,
-        embedding_function=getEmbeddings()
+        persist_directory=CHROMA_PATH, embedding_function=getEmbeddings()
     )
 
     chunkIDs = calculateChunkID(chunks)
+
+    # add/update the documents
     existingItems = db.get(include=[])
     existingIds = set(existingItems["ids"])
+    print(f"Number of existing documents in DB: {len(existingIds)}")
 
-    print(f"[INFO] Existing documents in DB: {len(existingIds)}", flush=True)
-
+    #only add documents that don't exist in the DB
     newChunks = []
     for chunk in chunkIDs:
         if chunk.metadata["id"] not in existingIds:
             newChunks.append(chunk)
 
-    if newChunks:
-        print(f"[INFO] Adding {len(newChunks)} new documents to Chroma.", flush=True)
+    if len(newChunks):
+        print(f"Adding new documents: {len(newChunks)}")
         newChunkID = [chunk.metadata["id"] for chunk in newChunks]
         db.add_documents(newChunks, ids=newChunkID)
     else:
-        print("[INFO] No new documents to add.", flush=True)
+        print("No new documents to add")
+
 
 def calculateChunkID(chunks):
+
+    #this will create IDs like "transcripts/...docx:3:5"
+    # Document Source : Page Number : Chunk Index
+
     lastPageID = None
     currentChunkIdx = 0
 
@@ -85,21 +81,24 @@ def calculateChunkID(chunks):
         page = chunk.metadata.get("page")
         currentPageID = f"{source}:{page}"
 
+        #if page ID is same as the last one, increment index
         if currentPageID == lastPageID:
             currentChunkIdx += 1
         else:
             currentChunkIdx = 0
 
+        # calculate the chunk ID
         chunk_id = f"{currentPageID}:{currentChunkIdx}"
         lastPageID = currentPageID
 
+        # add it to the page meta-data
         chunk.metadata["id"] = chunk_id
 
     return chunks
 
+
 def clear_database():
     if os.path.exists(CHROMA_PATH):
-        print(f"[INFO] Clearing Chroma database at {CHROMA_PATH}", flush=True)
         shutil.rmtree(CHROMA_PATH)
 
 if __name__ == "__main__":
