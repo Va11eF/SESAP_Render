@@ -1,3 +1,9 @@
+/*
+**    DateOnlyConverter.cs
+
+*     Simple file for changing a string to a DateOnly object used when storing interview dates
+*/
+
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;

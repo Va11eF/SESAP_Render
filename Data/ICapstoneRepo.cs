@@ -1,3 +1,10 @@
+/*
+**   ICapstoneRepo.cs
+
+*    This file outlines the methods used for interacting with the database
+*    Used for storing, saving, getting, and deletion of interviews 
+*/
+
 using CapstoneController.Models;
 
 namespace CapstoneController.Data{

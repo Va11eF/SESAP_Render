@@ -1,3 +1,11 @@
+/*
+**   Interviews.cs
+
+*    This file holds all of the properties needed for a interview entry in the database 
+*    Each interview will have an Id, interviewee name, interviewer name, interview date,
+*    interview description, and embeded link from kaltura (provided by the user), and a transcript file
+*/
+
 using CapstoneController.Data;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;

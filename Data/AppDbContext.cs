@@ -1,3 +1,9 @@
+/*
+**  AppDbContext.cs **
+
+*   This file links the tables in the mySQL database to the application
+*/
+
 using Microsoft.EntityFrameworkCore;
 using CapstoneController.Models;
 using Microsoft.EntityFrameworkCore.Diagnostics;
