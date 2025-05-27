@@ -56,7 +56,7 @@ async Task<IResult?> runPythonScript(string scriptPath, string workingDirectory)
 {
     var startInfo = new ProcessStartInfo
     {
-        FileName = "python",
+        FileName = "python3",
         Arguments = $"\"{scriptPath}\"",
         RedirectStandardOutput = true,
         RedirectStandardError = true,
