@@ -4,11 +4,10 @@ WORKDIR /src
 
 COPY CapstoneController.sln ./
 COPY . ./
-
 RUN dotnet restore
 RUN dotnet publish CapstoneController.csproj -c Release -o /out
 
-# Stage 2: Build and run everything
+# Stage 2: Run everything
 FROM node:18-slim
 
 # Install Python, curl, and .NET runtime
@@ -23,17 +22,17 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-# Copy and install Node dependencies
+# Copy Node app and install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy entire source
+# Copy everything else (source code, .py, .NET backend, etc.)
 COPY . .
 
 # Build frontend
 RUN npm run build
 
-# Set up Python environment
+# Setup Python environment
 RUN python3 -m venv /opt/venv && \
     . /opt/venv/bin/activate && \
     /opt/venv/bin/pip install --upgrade pip && \
@@ -41,7 +40,7 @@ RUN python3 -m venv /opt/venv && \
 
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Copy .NET publish output to known location
+# Copy published .NET output
 COPY --from=build /out ./dotnet
 
 EXPOSE 5000
