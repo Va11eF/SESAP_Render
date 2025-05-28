@@ -65,6 +65,9 @@ async Task<IResult?> runPythonScript(string scriptPath, string workingDirectory)
         WorkingDirectory = workingDirectory
     };
 
+    Console.WriteLine($"[DEBUG] Running: {startInfo.FileName} {startInfo.Arguments}");
+    Console.WriteLine($"[DEBUG] In directory: {startInfo.WorkingDirectory}");
+
     using var process = new Process { StartInfo = startInfo };
 
     try
@@ -108,6 +111,10 @@ app.MapPost("api/v1/interviews", async (ICapstoneRepo repo, IMapper mapper, Inte
 
     // Run populateDatabase.py
     var populateScript = Path.Combine(baseDirectory, "populateDatabase.py");
+
+    Console.WriteLine($"[DEBUG] Full script path: {populateScript}");
+    Console.WriteLine($"[DEBUG] Working directory: {baseDirectory}");
+
     var result1 = await runPythonScript(populateScript, baseDirectory);
     if (result1 is not null) return result1;
 
