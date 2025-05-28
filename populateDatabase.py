@@ -1,3 +1,5 @@
+# reference: 
+# https://github.com/pixegami/langchain-rag-tutorial
 print("[PYTHON] populateDatabase.py started", flush=True)
 import os
 import time
@@ -80,17 +82,20 @@ def splitDocuments(documents: list[Document]):
     return textSplitter.split_documents(documents)
 
 # def addToChroma(chunks: list[Document]):
+#    #load existing database
 #     db = Chroma(
 #         persist_directory=CHROMA_PATH,
 #         embedding_function=getEmbeddings()
 #     )
 
 #     chunkIDs = calculateChunkID(chunks)
+#     # add/update the documents
 #     existingItems = db.get(include=[])
 #     existingIds = set(existingItems["ids"])
 
 #     print(f"[INFO] Existing documents in DB: {len(existingIds)}", flush=True)
 
+#     #only add documents that don't exist in the DB
 #     newChunks = []
 #     for chunk in chunkIDs:
 #         if chunk.metadata["id"] not in existingIds:
@@ -115,6 +120,8 @@ def addToChroma(chunks: list[Document]):
         print(f"[EXCEPTION] Failed to initialize embeddings: {e}", flush=True)
 
 def calculateChunkID(chunks):
+    #this will create IDs like "transcripts/...docx:3:5"
+    # Document Source : Page Number : Chunk Index
     lastPageID = None
     currentChunkIdx = 0
 
@@ -123,14 +130,17 @@ def calculateChunkID(chunks):
         page = chunk.metadata.get("page")
         currentPageID = f"{source}:{page}"
 
+        #if page ID is same as the last one, increment index
         if currentPageID == lastPageID:
             currentChunkIdx += 1
         else:
             currentChunkIdx = 0
 
+         # calculate the chunk ID
         chunk_id = f"{currentPageID}:{currentChunkIdx}"
         lastPageID = currentPageID
 
+        # add it to the page meta-data
         chunk.metadata["id"] = chunk_id
 
     return chunks
