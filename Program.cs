@@ -53,25 +53,7 @@ app.UseHttpsRedirection();
 
 /* Runs a python script given a script path (filename) and the working directory for output */
 async Task<IResult?> runPythonScript(string scriptPath, string workingDirectory)
-{
-    Console.WriteLine("[DEBUG] Trying `which python3`");
-    var checkPython = new Process
-    {
-        StartInfo = new ProcessStartInfo
-        {
-            FileName = "which",
-            Arguments = "python3",
-            RedirectStandardOutput = true,
-            UseShellExecute = false
-        }
-    };
-    checkPython.Start();
-    var whichOutput = await checkPython.StandardOutput.ReadToEndAsync();
-    checkPython.WaitForExit();
-    Console.WriteLine($"[DEBUG] which python3: {whichOutput}");
-
-
-    
+{   
     var startInfo = new ProcessStartInfo
     {
         FileName = "python3",

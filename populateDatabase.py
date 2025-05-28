@@ -13,49 +13,62 @@ CHROMA_PATH = "chroma"
 
 def main():
     try:
-        print("[INFO] Main started", flush=True)
+        print("[INFO] Script started.", flush=True)
+        print(f"[INFO] Working directory: {os.getcwd()}", flush=True)
 
-        # Confirm transcript folder exists
-        print(f"[INFO] CWD: {os.getcwd()}", flush=True)
-        print(f"[INFO] Listing transcripts dir:", flush=True)
-        print(os.listdir(DATA_PATH), flush=True)
+        if not os.path.exists(DATA_PATH):
+            print(f"[ERROR] transcripts folder not found at {DATA_PATH}", flush=True)
+            return
+        else:
+            print(f"[INFO] transcripts directory found at: {DATA_PATH}", flush=True)
 
-        print("[INFO] Exiting early", flush=True)
+        documents = loadDocuments()
+        print(f"[INFO] Loaded {len(documents)} documents.", flush=True)
+
+        if not documents:
+            print("[WARN] No documents found in transcripts folder.", flush=True)
+            return
+
+        chunks = splitDocuments(documents)
+        print(f"[INFO] Split documents into {len(chunks)} chunks.", flush=True)
+
+        addToChroma(chunks)
+
+        print("[INFO] Script completed successfully.", flush=True)
+
     except Exception as e:
-        print(f"[EXCEPTION] {e}", flush=True)
+        print(f"[EXCEPTION] An error occurred: {e}", flush=True)
 
-# def main():
-#     try:
-#         print("[INFO] Script started.", flush=True)
-#         print(f"[INFO] Working directory: {os.getcwd()}", flush=True)
+# def loadDocuments():
+#     loader = DirectoryLoader(DATA_PATH, glob="**/*.docx")
+#     documents = loader.load()
+#     return documents
 
-#         if not os.path.exists(DATA_PATH):
-#             print(f"[ERROR] transcripts folder not found at {DATA_PATH}", flush=True)
-#             return
-#         else:
-#             print(f"[INFO] transcripts directory found at: {DATA_PATH}", flush=True)
-
-#         documents = loadDocuments()
-#         print(f"[INFO] Loaded {len(documents)} documents.", flush=True)
-
-#         if not documents:
-#             print("[WARN] No documents found in transcripts folder.", flush=True)
-#             return
-
-#         chunks = splitDocuments(documents)
-#         print(f"[INFO] Split documents into {len(chunks)} chunks.", flush=True)
-
-#         addToChroma(chunks)
-
-#         print("[INFO] Script completed successfully.", flush=True)
-
-#     except Exception as e:
-#         print(f"[EXCEPTION] An error occurred: {e}", flush=True)
 
 def loadDocuments():
-    loader = DirectoryLoader(DATA_PATH, glob="**/*.docx")
-    documents = loader.load()
-    return documents
+    print("[INFO] Attempting to load documents from:", DATA_PATH, flush=True)
+    
+    if not os.path.exists(DATA_PATH):
+        print("[ERROR] transcripts directory not found!", flush=True)
+        return []
+
+    files = list(os.walk(DATA_PATH))
+    print(f"[INFO] Found {len(files)} file/folder entries under transcripts/", flush=True)
+
+    for dirpath, _, filenames in files:
+        for f in filenames:
+            print(f"[DEBUG] Found file: {os.path.join(dirpath, f)}", flush=True)
+
+    try:
+        loader = DirectoryLoader(DATA_PATH, glob="**/*.docx")
+        documents = loader.load()
+        print(f"[INFO] Successfully loaded {len(documents)} documents", flush=True)
+        return documents
+    except Exception as e:
+        print(f"[EXCEPTION] During DirectoryLoader.load(): {e}", flush=True)
+        return []
+
+
 
 def splitDocuments(documents: list[Document]):
     textSplitter = RecursiveCharacterTextSplitter(
