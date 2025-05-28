@@ -39,34 +39,34 @@ def main():
     except Exception as e:
         print(f"[EXCEPTION] An error occurred: {e}", flush=True)
 
-# def loadDocuments():
-#     loader = DirectoryLoader(DATA_PATH, glob="**/*.docx")
-#     documents = loader.load()
-#     return documents
-
-
 def loadDocuments():
-    print("[INFO] Attempting to load documents from:", DATA_PATH, flush=True)
+    loader = DirectoryLoader(DATA_PATH, glob="**/*.docx")
+    documents = loader.load()
+    return documents
+
+
+# def loadDocuments():
+#     print("[INFO] Attempting to load documents from:", DATA_PATH, flush=True)
     
-    if not os.path.exists(DATA_PATH):
-        print("[ERROR] transcripts directory not found!", flush=True)
-        return []
+#     if not os.path.exists(DATA_PATH):
+#         print("[ERROR] transcripts directory not found!", flush=True)
+#         return []
 
-    files = list(os.walk(DATA_PATH))
-    print(f"[INFO] Found {len(files)} file/folder entries under transcripts/", flush=True)
+#     files = list(os.walk(DATA_PATH))
+#     print(f"[INFO] Found {len(files)} file/folder entries under transcripts/", flush=True)
 
-    for dirpath, _, filenames in files:
-        for f in filenames:
-            print(f"[DEBUG] Found file: {os.path.join(dirpath, f)}", flush=True)
+#     for dirpath, _, filenames in files:
+#         for f in filenames:
+#             print(f"[DEBUG] Found file: {os.path.join(dirpath, f)}", flush=True)
 
-    try:
-        loader = DirectoryLoader(DATA_PATH, glob="**/*.docx")
-        documents = loader.load()
-        print(f"[INFO] Successfully loaded {len(documents)} documents", flush=True)
-        return documents
-    except Exception as e:
-        print(f"[EXCEPTION] During DirectoryLoader.load(): {e}", flush=True)
-        return []
+#     try:
+#         loader = DirectoryLoader(DATA_PATH, glob="**/*.docx")
+#         documents = loader.load()
+#         print(f"[INFO] Successfully loaded {len(documents)} documents", flush=True)
+#         return documents
+#     except Exception as e:
+#         print(f"[EXCEPTION] During DirectoryLoader.load(): {e}", flush=True)
+#         return []
 
 
 
@@ -79,29 +79,40 @@ def splitDocuments(documents: list[Document]):
     )
     return textSplitter.split_documents(documents)
 
+# def addToChroma(chunks: list[Document]):
+#     db = Chroma(
+#         persist_directory=CHROMA_PATH,
+#         embedding_function=getEmbeddings()
+#     )
+
+#     chunkIDs = calculateChunkID(chunks)
+#     existingItems = db.get(include=[])
+#     existingIds = set(existingItems["ids"])
+
+#     print(f"[INFO] Existing documents in DB: {len(existingIds)}", flush=True)
+
+#     newChunks = []
+#     for chunk in chunkIDs:
+#         if chunk.metadata["id"] not in existingIds:
+#             newChunks.append(chunk)
+
+#     if newChunks:
+#         print(f"[INFO] Adding {len(newChunks)} new documents to Chroma.", flush=True)
+#         newChunkID = [chunk.metadata["id"] for chunk in newChunks]
+#         db.add_documents(newChunks, ids=newChunkID)
+#     else:
+#         print("[INFO] No new documents to add.", flush=True)
+
 def addToChroma(chunks: list[Document]):
-    db = Chroma(
-        persist_directory=CHROMA_PATH,
-        embedding_function=getEmbeddings()
-    )
+    print("[DEBUG] addToChroma entered", flush=True)
 
-    chunkIDs = calculateChunkID(chunks)
-    existingItems = db.get(include=[])
-    existingIds = set(existingItems["ids"])
-
-    print(f"[INFO] Existing documents in DB: {len(existingIds)}", flush=True)
-
-    newChunks = []
-    for chunk in chunkIDs:
-        if chunk.metadata["id"] not in existingIds:
-            newChunks.append(chunk)
-
-    if newChunks:
-        print(f"[INFO] Adding {len(newChunks)} new documents to Chroma.", flush=True)
-        newChunkID = [chunk.metadata["id"] for chunk in newChunks]
-        db.add_documents(newChunks, ids=newChunkID)
-    else:
-        print("[INFO] No new documents to add.", flush=True)
+    # Comment out everything except the embedding init
+    try:
+        print("[DEBUG] Initializing embeddings...", flush=True)
+        embeddings = getEmbeddings()
+        print("[DEBUG] Embeddings initialized successfully.", flush=True)
+    except Exception as e:
+        print(f"[EXCEPTION] Failed to initialize embeddings: {e}", flush=True)
 
 def calculateChunkID(chunks):
     lastPageID = None
