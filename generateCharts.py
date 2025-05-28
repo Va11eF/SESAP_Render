@@ -30,7 +30,7 @@ for filename in os.listdir(results_dir):
             data = json.load(f)
             studentName = data.get("name", "").strip()
             themeList = [t.strip() for t in data.get("themes", "").split(",")]
-            identityList = [i.strip() for i in data.get("identities", "").split(",")]
+            identityList = [i.strip() for i in data.get("identities", "").split(",")] # Ensure themes and identities are valid
 
             if studentName not in students:
                 students.append(studentName)
@@ -41,7 +41,7 @@ for filename in os.listdir(results_dir):
                     for identity in identityList:
                         if identity in identities:
                             identityIdx = identities.index(identity)
-                            countMatch[themeIdx][identityIdx] += 1
+                            countMatch[themeIdx][identityIdx] += 1 #increment the count for theme and identity
 
 # === Create output directory ===
 
@@ -51,7 +51,7 @@ os.makedirs(images_dir, exist_ok=True)
 # === Generate Word Cloud ===
 
 theme_sums = np.sum(countMatch, axis=1)
-word_freq = {themes[i]: int(theme_sums[i]) for i in range(len(themes)) if theme_sums[i] > 0}
+word_freq = {themes[i]: int(theme_sums[i]) for i in range(len(themes)) if theme_sums[i] > 0} #create a dictionary for themes frequencies
 
 wordcloud = WordCloud(width=800, height=400, background_color="white").generate_from_frequencies(word_freq)
 
