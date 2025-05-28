@@ -32,7 +32,7 @@ def main():
         chunks = splitDocuments(documents)
         print(f"[INFO] Split documents into {len(chunks)} chunks.", flush=True)
 
-        #addToChroma(chunks)
+        addToChroma(chunks)
 
         print("[INFO] Script completed successfully.", flush=True)
 
