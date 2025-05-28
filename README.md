@@ -42,13 +42,14 @@ Visualizations: SciPy chart outputs <br/>
 Database: MySQL database hosted through Aiven <br/>
 
 ## Architecture Overview
-This project is split up into multiple components, each with its own functionality and purpose. 
+This project is split up into multiple components, each with its own functionality and purpose. For more in depth detail, refer SESAP Design Document.
 
 #### React Frontend UI 
 Serves the content of the website, where users can view the different visualizations, narratives (interviews), purpose, and Recommendations. If a whitelisted user (which is verified via Google Sign-in) tries to post an interview, it sends a request to the backend controller with all of the required parameters. The same logic is applied if one of these users tries to delete an interview as well. The visualizations are also automatically updated and displayed to reflect any changes
 
 #### Backend Controller
 Acts as the routing capability of the project, and is connected to both the database as well as the Large Language Model. When a request for a new interview comes in, the controller will first verify that the user is whitelisted, store all of the requested parameters in a database, convert the transcript text into a .docx file, and run the LLM script. When deleting an interview, the controller will look for that interviews ID in the database, locate it, and remove it. 
+For API documentation, refer to SESAP API Document.
 
 #### Transcript Analysis Pipeline
 Runs in the background after each newly uploaded transcript, and outputs visualizations of the analyses generated. Once automatically initiated by the controller, it loads new transcripts into a vectorized database, which lets us use Retrieval Augmented Generation (RAG) when querying the LLM model. Using the OpenRouter API to query, the response is given in a JSON format, then loaded into MATLAB configuration, where it creates a bar chart and a word cloud of the analysis. 
@@ -58,31 +59,8 @@ General users can visit the website to view the student interviews or look over 
 
 Here is the link to the SESAP website [Insert link once deployed].
 
-#### Front end
-
-If you were to run it locally, these following steps walk you through that.
-For the front end you would need to install react and its dependencies to run the front end. 
-
-Run “npm install” in the terminal <br/>
-Run  “npm install react” <br/>
-Run  “npm install react-dom” <br/>
-Run  “npm install react-router-dom” <br/>
-Run  “npm install @emotion/react” <br/>
-Run  “npm install @emotion/styled” <br/>
-Run  “npm install axios” <br/>
-To run the backend server you would need to run “npm install express multer cors axios” <br/>
-There is a requirements.txt file included that lists all dependencies needed as well. 
-
-#### Controller 
-
-For the controller you will need to download the .NET SDK along with storing user-secrets to set the database connection string 
-
-Go to the Microsoft .NET SDK download page and install version 6. <br/>
-In a terminal, run “dotnet user-secrets init” <br/>
-Run “dotnet user-secrets set “ConnectionStrings:AivenMySQL" "UserSecret"” <br/>
-Run “dotnet build” <br/>
-Run “dotnet run” <br/>
-
+## Deployment and Setup Procedures
+For step-by-step guide on the deployment process, maintenance, and troubleshooting, refer to SESAP-Deployment-Hosting-Documentation.
 
 
 ## Contact Information
