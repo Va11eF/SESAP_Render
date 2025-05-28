@@ -1,8 +1,4 @@
 #!/bin/bash
-
-echo "[DEBUG] Current files in /app:"
-ls -la /app
-
 set -e
 
 echo "Starting combined Capstone app..."
