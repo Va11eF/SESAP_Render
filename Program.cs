@@ -88,6 +88,8 @@ async Task<IResult?> runPythonScript(string scriptPath, string workingDirectory)
     }
     catch (Exception ex)
     {
+        Console.WriteLine($"[ERROR] Exception starting script {scriptPath}: {ex.Message}");
+        Console.WriteLine($"[ERROR] StackTrace: {ex.StackTrace}");
         return Results.Problem($"Exception running {Path.GetFileName(scriptPath)}: {ex.Message}");
     }
 

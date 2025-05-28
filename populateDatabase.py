@@ -1,3 +1,4 @@
+print("[PYTHON] populateDatabase.py started", flush=True)
 import os
 import time
 import shutil
@@ -103,4 +104,5 @@ def clear_database():
         shutil.rmtree(CHROMA_PATH)
 
 if __name__ == "__main__":
+    print("[PYTHON] populateDatabase.py main entered", flush=True)
     main()
