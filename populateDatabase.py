@@ -13,31 +13,44 @@ CHROMA_PATH = "chroma"
 
 def main():
     try:
-        print("[INFO] Script started.", flush=True)
-        print(f"[INFO] Working directory: {os.getcwd()}", flush=True)
+        print("[INFO] Main started", flush=True)
 
-        if not os.path.exists(DATA_PATH):
-            print(f"[ERROR] transcripts folder not found at {DATA_PATH}", flush=True)
-            return
-        else:
-            print(f"[INFO] transcripts directory found at: {DATA_PATH}", flush=True)
+        # Confirm transcript folder exists
+        print(f"[INFO] CWD: {os.getcwd()}", flush=True)
+        print(f"[INFO] Listing transcripts dir:", flush=True)
+        print(os.listdir(DATA_PATH), flush=True)
 
-        documents = loadDocuments()
-        print(f"[INFO] Loaded {len(documents)} documents.", flush=True)
-
-        if not documents:
-            print("[WARN] No documents found in transcripts folder.", flush=True)
-            return
-
-        chunks = splitDocuments(documents)
-        print(f"[INFO] Split documents into {len(chunks)} chunks.", flush=True)
-
-        addToChroma(chunks)
-
-        print("[INFO] Script completed successfully.", flush=True)
-
+        print("[INFO] Exiting early", flush=True)
     except Exception as e:
-        print(f"[EXCEPTION] An error occurred: {e}", flush=True)
+        print(f"[EXCEPTION] {e}", flush=True)
+
+# def main():
+#     try:
+#         print("[INFO] Script started.", flush=True)
+#         print(f"[INFO] Working directory: {os.getcwd()}", flush=True)
+
+#         if not os.path.exists(DATA_PATH):
+#             print(f"[ERROR] transcripts folder not found at {DATA_PATH}", flush=True)
+#             return
+#         else:
+#             print(f"[INFO] transcripts directory found at: {DATA_PATH}", flush=True)
+
+#         documents = loadDocuments()
+#         print(f"[INFO] Loaded {len(documents)} documents.", flush=True)
+
+#         if not documents:
+#             print("[WARN] No documents found in transcripts folder.", flush=True)
+#             return
+
+#         chunks = splitDocuments(documents)
+#         print(f"[INFO] Split documents into {len(chunks)} chunks.", flush=True)
+
+#         addToChroma(chunks)
+
+#         print("[INFO] Script completed successfully.", flush=True)
+
+#     except Exception as e:
+#         print(f"[EXCEPTION] An error occurred: {e}", flush=True)
 
 def loadDocuments():
     loader = DirectoryLoader(DATA_PATH, glob="**/*.docx")
