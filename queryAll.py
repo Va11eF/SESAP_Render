@@ -11,7 +11,7 @@ def main():
     load_dotenv()
     transcriptFileNames = [ 
         f for f in os.listdir("./transcripts/") 
-        if f.endswith(".docx")
+        if f.endswith(".docx") # finds to only process .docx files
     ]
     queryAll(transcriptFileNames)
 
@@ -25,7 +25,7 @@ def saveResults(filename, results):
         json.dump(results, file, indent=4)
 
 
-def formatJSON(responseLLM):
+def formatJSON(responseLLM): #Extracts JSON from the LLM response
     stack = []
     start = None
     for i, char in enumerate(responseLLM):
@@ -49,7 +49,7 @@ def queryAll(transcriptFileNames):
         resultsFile = os.path.join(RESULTS_PATH, f"{filename}_results.json")
         
         if os.path.exists(resultsFile):
-            print(f"Skipping {filename} [results already exist.]")
+            print(f"Skipping {filename} [results already exist.]") #avoid reprocessing
             continue
 
         print(f"Processing: {filename}")
