@@ -174,6 +174,15 @@ app.MapGet("api/v1/whitelistedUsers", async (ICapstoneRepo repo, IMapper mapper)
     return Results.Ok(mapper.Map<IEnumerable<WhitelistedUsersDto>>(whitelistedUsers));
 });
 
+app.MapPost("api/v1/whitelistedUsers", async (ICapstoneRepo repo, IMapper mapper, WhitelistedUsersDto whitelistedUserDto) => {
+    var whitelistModel = mapper.Map<WhitelistedUsers>(whitelistedUserDto);
+
+    await repo.CreateWhitelistedUser(whitelistModel);
+    await repo.SaveChanges();
+
+    return Results.Created($"/api/v1/whitelistedUsers/{whitelistModel.Id}", whitelistedUserDto);
+});
+
 app.Run();
 
 
