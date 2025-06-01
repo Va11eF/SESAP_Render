@@ -180,7 +180,7 @@ app.MapPost("api/v1/whitelistedUsers", async (ICapstoneRepo repo, IMapper mapper
     await repo.CreateWhitelistedUser(whitelistModel);
     await repo.SaveChanges();
 
-    return Results.Created($"/api/v1/whitelistedUsers/{whitelistModel.Id}", whitelistedUserDto);
+    return Results.Created($"{whitelistedUserDto}", whitelistedUserDto);
 });
 
 app.Run();
