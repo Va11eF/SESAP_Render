@@ -33,7 +33,7 @@ const EmailList = styled.ul`
   padding: 0;
 
   li {
-    background: #f1f3f5;
+    background: #495057;
     margin-bottom: 8px;
     padding: 8px 12px;
     border-radius: 4px;
