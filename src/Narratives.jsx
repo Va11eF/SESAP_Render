@@ -291,6 +291,8 @@ function NarrativePage() {
   }, []);
 
   useEffect(() => {
+    if (!userEmail) return;
+
     const fetchWhitelist = async () => {
       try {
         const response = await axios.get("/api/whitelist");
@@ -299,19 +301,23 @@ function NarrativePage() {
         const emails = data.map(user => user.email.toLowerCase());
         setWhitelistEmails(emails);
 
-        const admin = data.find(user =>
-          user.email.toLowerCase() === userEmail.toLowerCase() &&
-          user.isAdmin === true
-        );
-        setIsAdmin(admin)
+        if (userEmail) {
+          const admin = data.find(user =>
+            user.email.toLowerCase() === userEmail.toLowerCase() &&
+            user.isAdmin === true
+          );
+          setIsAdmin(!!admin)
+        }
 
       } catch (error) {
         console.error("Failed to fetch whitelist emails:", error);
       }
     };
-
-    fetchWhitelist();
-  }, []);
+    if (userEmail) {
+      fetchWhitelist();
+    }
+    
+  }, [userEmail]);
 
   const isWhitelisted = userEmail && whitelistEmails.includes(userEmail.toLowerCase());
 
