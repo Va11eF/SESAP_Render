@@ -21,7 +21,7 @@ namespace CapstoneController.Data{
 
         Task<IEnumerable<WhitelistedUsers>> GetAllWhitelistedUsers();
 
-        TTask CreateWhitelistedUser(WhitelistedUsers whitelistedUsers);
+        Task CreateWhitelistedUser(WhitelistedUsers whitelistedUsers);
 
     }
 }
