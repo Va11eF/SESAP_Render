@@ -16,5 +16,7 @@ namespace CapstoneController.Models{
         [Required]
         public string? email {get; set;}
 
+        public bool isAdmin { get; set; } = false;
+
     }
 }

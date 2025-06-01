@@ -9,6 +9,7 @@ import RecommendationPage from './recommendation';
 import PurposePage from './Purpose';
 import NarrativePage from './Narratives';
 import InterviewVideo from './InterviewVideo';
+import AdminWhitelistPage from './AdminWhitelistPage';
 import ErrorPage from './Error';
 
 // Font Awesome source used for icons: https://fontawesome.com/
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
             {
                 path: "/interview-video/:id", 
                 element: <InterviewVideo/>
+            },
+            {
+                path: "/whitelistedUsers",
+                element: <AdminWhitelistPage/>
             }
         ]
     }

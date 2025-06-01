@@ -176,6 +176,22 @@ app.get("/api/whitelist", async (req, res) => {
   }
 });
 
+app.post("/api/whitelist", async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({ error: "Email is required" });
+  }
+
+  try {
+    const response = await axios.post(`${BACKEND_URL}/api/v1/whitelistedUsers`, { email });
+    res.status(201).json(response.data);
+  } catch (error) {
+    console.error("Error adding whitelisted user:", error);
+    res.status(500).json({ error: "Failed to add whitelisted user" });
+  }
+});
+
+
 // Start the server
 const PORT = process.env.PORT || 5000;
 

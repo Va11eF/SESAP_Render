@@ -14,5 +14,7 @@ namespace CapstoneController.Dtos{
         [Required]
         public string? email {get; set;}
 
+        public bool isAdmin { get; set; } = false;
+
     }
 }

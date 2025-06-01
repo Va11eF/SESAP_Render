@@ -60,5 +60,16 @@ namespace CapstoneController.Data{
             return await _context.WhitelistedUsers.ToListAsync();
         }
 
+                /* "api/v1/interviews POST request */
+        public async Task CreateWhitelistedUser(WhitelistedUsers whitelistedUsers)
+        {
+            if (whitelistedUsers == null)
+            {
+                throw new ArgumentNullException(nameof(whitelistedUsers));
+            }
+
+            await _context.WhitelistedUsers.AddAsync(whitelistedUsers);
+        }
+
     }
 }

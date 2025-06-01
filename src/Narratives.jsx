@@ -272,7 +272,8 @@ function NarrativePage() {
   const [textFiles, setTextFiles] = useState([]);
   ////////
   const [userEmail, setUserEmail] = useState(null);
-  const [whitelistEmails, setWhitelistEmails] = useState([]); // store emails here
+  const [whitelistEmails, setWhitelistEmails] = useState([]); 
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // Decode JWT and set user email
   useEffect(() => {
@@ -293,9 +294,17 @@ function NarrativePage() {
     const fetchWhitelist = async () => {
       try {
         const response = await axios.get("/api/whitelist");
-        // Assuming response.data = array of { email: "user@example.com", ... }
-        const emails = response.data.map(user => user.email.toLowerCase());
+        const data = response.data;
+
+        const emails = data.map(user => user.email.toLowerCase());
         setWhitelistEmails(emails);
+
+        const admin = data.find(user =>
+          user.email.toLowerCase() === userEmail.toLowerCase() &&
+          user.isAdmin === true
+        );
+        setIsAdmin(admin)
+
       } catch (error) {
         console.error("Failed to fetch whitelist emails:", error);
       }
@@ -456,6 +465,9 @@ function NarrativePage() {
         {isWhitelisted ? (
           <Button onClick={() => setIsModalOpen(true)}>Add New Narrative</Button>
         ) : null}
+        {isAdmin && (
+          <Button onClick={() => navigate("/whitelistedUsers")}>Manage Whitelisted Users</Button>
+        )}
       </Filter>
       <Dialog open={isModalOpen} onOpenChange={handleModalClose}>
         <DialogContent>
