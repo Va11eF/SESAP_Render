@@ -1,5 +1,7 @@
 import { useRouteError } from "react-router-dom"
 
+
+// ErrorPage component to display error messages
 export default function ErrorPage(){
     const error = useRouteError()
     return (
