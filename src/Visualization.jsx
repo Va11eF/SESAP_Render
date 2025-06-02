@@ -39,7 +39,7 @@ export default function VisualizationPage() {
   return (
     <ContentVisulization>
       <ContainerVisulization>
-        <Header>Thematic Trends</Header>
+        <Header>Thematic Trends Word Cloud</Header>
         <Image src="/wordcloud.png" alt="Thematic Trends Word Cloud" />
         <Paragraph>
           The word cloud represents the experiences of culture, identity, and power found in the student narratives. 
@@ -47,24 +47,7 @@ export default function VisualizationPage() {
         </Paragraph>
       </ContainerVisulization>
 
-      <ContainerVisulization>
-        <Header>Experiences of Adversity by Identity</Header>
-        <Image src="/CodingMap.png" alt="Experiences of Adversity by Identity Chart" />
-        <Paragraph>
-          By collecting the key terms found through the narratives, we have analyzed how identity plays a role in the student 
-          experiences of discrimination, connection, financial difficulty, and cultural representation. This chart represents these impacts.
-        </Paragraph>
-      </ContainerVisulization>
 
-      <ContainerVisulization>
-        <Header>Research Process Flow</Header>
-        <Image src="/ProcessFlow.png" alt="Research Process Flow Chart" />
-        <Paragraph>
-          Our process flow chart depicts the ways in which the research project is conducted. By interviewing individuals of often underserved 
-          communities and analyzing the trends seen in these interviews, we can present these results in hope of creating positive change within 
-          the OSU engineering community and beyond.
-        </Paragraph>
-      </ContainerVisulization>
 
       <ContainerVisulization>
         <Header>Thematic Coding Map</Header>

@@ -270,7 +270,6 @@ function NarrativePage() {
   const [selectedThemes, setSelectedThemes] = useState([]);
   const [interviewDate, setInterviewDate] = useState("");
   const [textFiles, setTextFiles] = useState([]);
-  ////////
   const [userEmail, setUserEmail] = useState(null);
   const [whitelistEmails, setWhitelistEmails] = useState([]); 
   const [isAdmin, setIsAdmin] = useState(false);

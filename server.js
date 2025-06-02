@@ -2,7 +2,7 @@ const fs = require("fs");
 const express = require("express");
 const multer = require("multer");
 const cors = require("cors");
-const axios = require("axios");  // Import axios
+const axios = require("axios");
 const path = require("path");
 const app = express();
 
@@ -168,7 +168,7 @@ app.post("/proxy/api/interviews", async (req, res) => {
 app.get("/api/whitelist", async (req, res) => {
   try {
     const response = await axios.get(`${BACKEND_URL}/api/v1/whitelistedUsers`);
-    const whitelistUsers = response.data;  // assuming array of user objects with email field
+    const whitelistUsers = response.data;  
     res.json(whitelistUsers);
   } catch (error) {
     console.error("Error fetching whitelisted users:", error);

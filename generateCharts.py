@@ -65,10 +65,8 @@ plt.close()
 
 # === Generate Stacked Horizontal Bar Chart ===
 
-# Transpose to match MATLAB’s barh(countMatch') format
 data = countMatch.T
 
-# Custom color palette from MATLAB script (normalized RGB)
 colors = [
     [0.2, 0.8, 0.8], [1, 0.4, 0.4], [0.9, 0.9, 0.2], [0.7, 0.3, 0.9], [0.1, 0.9, 0.3],
     [0.3, 0.6, 1], [1, 0.2, 0.6], [0.5, 0.1, 0.5], [0.1, 0.7, 0.5], [0.9, 0.4, 0.4],
@@ -93,7 +91,7 @@ ax.set_yticklabels(identities, fontsize=9)
 ax.set_xlabel("Frequency")
 ax.set_ylabel(" ")
 ax.set_title("Theme Frequency per Identities Bar Chart")
-ax.invert_yaxis()  # Match MATLAB's 'YDir', 'reverse'
+ax.invert_yaxis()  
 ax.legend(loc='best', bbox_to_anchor=(1.05, 1), borderaxespad=0., title="Themes")
 plt.tight_layout()
 plt.savefig(os.path.join(images_dir, "barchart.png"))
