@@ -112,24 +112,24 @@ async Task<IResult?> runPythonScript(string scriptPath, string workingDirectory)
 app.MapPost("api/v1/interviews", async (ICapstoneRepo repo, IMapper mapper, InterviewDto interviewDto) => {
     var interviewmodel = mapper.Map<Interviews>(interviewDto);
 
-    string baseDirectory = Directory.GetCurrentDirectory();
+    //string baseDirectory = Directory.GetCurrentDirectory();
 
     // Run populateDatabase.py
-    var populateScript = Path.Combine(baseDirectory, "populateDatabase.py");
+    // var populateScript = Path.Combine(baseDirectory, "populateDatabase.py");
 
-    var result1 = await runPythonScript(populateScript, baseDirectory);
-    if (result1 is not null) return result1;
+    // var result1 = await runPythonScript(populateScript, baseDirectory);
+    // if (result1 is not null) return result1;
 
     // Run queryAll.py
-    var queryScript = Path.Combine(baseDirectory, "queryAll.py");
-    var result2 = await runPythonScript(queryScript, baseDirectory);
-    if (result2 is not null) return result2;
+    // var queryScript = Path.Combine(baseDirectory, "queryAll.py");
+    // var result2 = await runPythonScript(queryScript, baseDirectory);
+    // if (result2 is not null) return result2;
 
 
     // Run generateCharts.py
-    var chartScript = Path.Combine(baseDirectory, "generateCharts.py");
-    var result3 = await runPythonScript(chartScript, baseDirectory);
-    if (result3 is not null) return result3;
+    // var chartScript = Path.Combine(baseDirectory, "generateCharts.py");
+    // var result3 = await runPythonScript(chartScript, baseDirectory);
+    // if (result3 is not null) return result3;
     
 
     await repo.CreateInterview(interviewmodel);

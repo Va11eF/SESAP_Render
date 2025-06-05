@@ -99,6 +99,30 @@ app.post("/proxy/api/narratives", upload.single("transcript"), async (req, res) 
         newNarrative
       );
 
+
+      const scripts = [
+        "populateDatabase.py",
+        "queryAll.py",
+        "generateCharts.py"
+      ];
+
+      scripts.forEach(script => {
+        const child = spawn("python3", [script]);
+
+        child.stdout.on("data", data => {
+          console.log(`[${script}] Output:`, data.toString());
+        });
+
+        child.stderr.on("data", data => {
+          console.error(`[${script}] Error:`, data.toString());
+        });
+
+        child.on("close", code => {
+          console.log(`[${script}] exited with code ${code}`);
+        });
+      });
+
+
       res.status(201).json(response.data);
     } catch (error) {
       console.error("Error saving narrative:", error);
