@@ -26,6 +26,30 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+function runScript(script) {
+  return new Promise((resolve, reject) => {
+    const child = spawn("python3", [script]);
+
+    child.stdout.on("data", data => {
+      console.log(`[${script}] Output:`, data.toString());
+    });
+
+    child.stderr.on("data", data => {
+      console.error(`[${script}] Error:`, data.toString());
+    });
+
+    child.on("close", code => {
+      console.log(`[${script}] exited with code ${code}`);
+      resolve();  // Resolve when done (even if code != 0)
+    });
+
+    child.on("error", err => {
+      console.error(`[${script}] Failed to start:`, err);
+      reject(err); // Reject on spawn error
+    });
+  });
+}
+
 // Increase the payload size limit for JSON and URL-encoded data
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
@@ -108,21 +132,9 @@ app.post("/proxy/api/narratives", upload.single("transcript"), async (req, res) 
         "generateCharts.py"
       ];
 
-      scripts.forEach(script => {
-        const child = spawn("python3", [script]);
-
-        child.stdout.on("data", data => {
-          console.log(`[${script}] Output:`, data.toString());
-        });
-
-        child.stderr.on("data", data => {
-          console.error(`[${script}] Error:`, data.toString());
-        });
-
-        child.on("close", code => {
-          console.log(`[${script}] exited with code ${code}`);
-        });
-      });
+      for (const script of scripts) {
+        await runScript(script);
+      }
 
 
       res.status(201).json(response.data);
@@ -167,34 +179,6 @@ app.put("/api/narratives/:id/embed", async (req, res) => {
   }
 });
 
-// app.post("/proxy/api/interviews", async (req, res) => {
-//   try {
-//     console.log("Proxying request to interviews API");
-//     // Log the size to debug
-//     console.log("Request size:", JSON.stringify(req.body).length / 1024 / 1024, "MB");
-    
-//     const response = await axios.post(
-//       `${BACKEND_URL}/api/v1/interviews`,
-//       req.body,
-//       {
-//         headers: {
-//           'Content-Type': 'application/json',
-//           // Add any other headers required by the API
-//         },
-//         // Increase axios timeout if needed
-//         timeout: 120000    // Increased to 120000 from 30000
-//       }
-//     );
-//     console.log("Proxy response:", response.data);
-//     res.json(response.data);
-//   } catch (error) {
-//     console.error("Error proxying to API:", error.response?.data || error.message);
-//     res.status(error.response?.status || 500).json({ 
-//       error: "Failed to proxy request to API", 
-//       details: error.response?.data || error.message 
-//     });
-//   }
-// });
 
 // Fetch all whitelisted users from the external API
 app.get("/api/whitelist", async (req, res) => {
