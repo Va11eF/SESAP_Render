@@ -57,7 +57,7 @@ Runs in the background after each newly uploaded transcript, and outputs visuali
 ## Access and Usage
 General users can visit the website to view the student interviews or look over the visualizations. If you are a whitelisted user working with the project, then you are allowed to submit new interviews to the archive. As it's a website, no download is needed.
 
-Here is the link to the SESAP website [Insert link once deployed].
+Here is the link to the SESAP website: https://sesap-render.onrender.com/ 
 
 ## Deployment and Setup Procedures
 For step-by-step guide on the deployment process, maintenance, and troubleshooting, refer to SESAP-Deployment-Hosting-Documentation.
