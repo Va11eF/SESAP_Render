@@ -55,7 +55,7 @@ For API documentation, refer to SESAP API Document.
 Runs in the background after each newly uploaded transcript, and outputs visualizations of the analyses generated. Once automatically initiated by the controller, it loads new transcripts into a vectorized database, which lets us use Retrieval Augmented Generation (RAG) when querying the LLM model. Using the OpenRouter API to query, the response is given in a JSON format, then loaded into MATLAB configuration, where it creates a bar chart and a word cloud of the analysis. 
 
 ## Access and Usage
-General users can visit the website to view the student interviews or look over the visualizations. If you are a whitelisted user working with the project, then you are allowed to submit new interviews to the archive. As it's a website, no download is needed.
+General users can visit the website to view the student interviews or look over the visualizations. If you are a whitelisted user working with the project, then you are allowed to submit new interviews to the archive. As it's a website, no download is needed. Admins have access to whitelist new users.
 
 Here is the link to the SESAP website: https://sesap-render.onrender.com/ 
 
