@@ -68,7 +68,7 @@ app.get("/api/narratives/:id", async (req, res) => {
 });
 
 // `transcript` is the field name in the form data for the uploaded file
-app.post("/api/narratives", upload.single("transcript"), async (req, res) => {
+app.post("/proxy/api/narratives", upload.single("transcript"), async (req, res) => {
     try {
       console.log("Request body:", req.body);
       console.log("Uploaded file info:", req.file);

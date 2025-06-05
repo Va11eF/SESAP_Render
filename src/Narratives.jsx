@@ -402,7 +402,7 @@ function NarrativePage() {
         formData.append("transcript", file); 
       }
 
-      const response = await axios.post("/proxy/api/interviews", formData, {
+      const response = await axios.post("/proxy/api/narratives", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
