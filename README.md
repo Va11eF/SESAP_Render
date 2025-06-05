@@ -45,7 +45,7 @@ Database: MySQL database hosted through Aiven <br/>
 This project is split up into multiple components, each with its own functionality and purpose. For more in depth detail, refer SESAP Design Document.
 
 #### React Frontend UI 
-Serves the content of the website, where users can view the different visualizations, narratives (interviews), purpose, and Recommendations. If a whitelisted user (which is verified via Google Sign-in) tries to post an interview, it sends a request to the backend controller with all of the required parameters. The same logic is applied if one of these users tries to delete an interview as well. The visualizations are also automatically updated and displayed to reflect any changes
+Serves the content of the website, where users can view the different visualizations, narratives (interviews), purpose, and Recommendations. If a whitelisted user (which is verified via Google Sign-in) tries to post an interview, it sends a request to the backend controller with all of the required parameters. The same logic is applied if one of these users tries to delete an interview as well. The visualizations are also automatically updated and displayed to reflect any changes.
 
 #### Backend Controller
 Acts as the routing capability of the project, and is connected to both the database as well as the Large Language Model. When a request for a new interview comes in, the controller will first verify that the user is whitelisted, store all of the requested parameters in a database, convert the transcript text into a .docx file, and run the LLM script. When deleting an interview, the controller will look for that interviews ID in the database, locate it, and remove it. 
