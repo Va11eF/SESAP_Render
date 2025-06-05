@@ -340,49 +340,79 @@ function NarrativePage() {
     });
   };
 
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+    
+  //   try {
+  //     let transcriptText = "";
+      
+  //     if (textFiles.length > 0) {
+  //       const file = textFiles[0];
+  //       // Check file size before reading
+  //       if (file.size > 10 * 1024 * 1024) { // 10MB
+  //         console.warn("Transcript file is very large, truncating or summarizing might be necessary");
+         
+  //       }
+  //       transcriptText = await file.text();
+  //     }
+      
+  //     // If transcript is extremely large, consider truncating
+  //     if (transcriptText.length > 1000000) { // ~1MB of text
+  //       console.warn(`Transcript is very large (${transcriptText.length} chars), truncating`);
+  //       transcriptText = transcriptText.substring(0, 1000000) + "... [truncated due to size]";
+  //     }
+      
+  //     const interviewPayload = {
+  //       intervieweeName,
+  //       interviewerName,
+  //       interviewDate,
+  //       interviewEmbedLink: embedLink,
+  //       interviewTranscript: transcriptText,
+  //       interviewDesc: description,
+  //     };
+  
+  //     console.log("Payload size:", JSON.stringify(interviewPayload).length / 1024, "KB");
+  
+  //     const response = await axios.post(
+  //       "/proxy/api/interviews", 
+  //       interviewPayload
+  //     );
+      
+  //     console.log("Interview data sent successfully:", response.data);
+  //     fetchNarratives();
+  //     handleModalClose();
+  //   } catch (error) {
+  //     console.error("Submission error:", error.response?.data || error.message);
+  //   }
+  // };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+
     try {
-      let transcriptText = "";
-      
+      const formData = new FormData();
+      formData.append("intervieweeName", intervieweeName);
+      formData.append("interviewerName", interviewerName);
+      formData.append("interviewDate", interviewDate);
+      formData.append("interviewEmbedLink", embedLink);
+      formData.append("interviewDesc", description);
+
       if (textFiles.length > 0) {
         const file = textFiles[0];
-        // Check file size before reading
-        if (file.size > 10 * 1024 * 1024) { // 10MB
-          console.warn("Transcript file is very large, truncating or summarizing might be necessary");
-         
-        }
-        transcriptText = await file.text();
+        formData.append("transcript", file); 
       }
-      
-      // If transcript is extremely large, consider truncating
-      if (transcriptText.length > 1000000) { // ~1MB of text
-        console.warn(`Transcript is very large (${transcriptText.length} chars), truncating`);
-        transcriptText = transcriptText.substring(0, 1000000) + "... [truncated due to size]";
-      }
-      
-      const interviewPayload = {
-        intervieweeName,
-        interviewerName,
-        interviewDate,
-        interviewEmbedLink: embedLink,
-        interviewTranscript: transcriptText,
-        interviewDesc: description,
-      };
-  
-      console.log("Payload size:", JSON.stringify(interviewPayload).length / 1024, "KB");
-  
-      const response = await axios.post(
-        "/proxy/api/interviews", 
-        interviewPayload
-      );
-      
-      console.log("Interview data sent successfully:", response.data);
+
+      const response = await axios.post("/proxy/api/interviews", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("Interview uploaded successfully:", response.data);
       fetchNarratives();
       handleModalClose();
     } catch (error) {
-      console.error("Submission error:", error.response?.data || error.message);
+      console.error("Upload error:", error.response?.data || error.message);
     }
   };
 
