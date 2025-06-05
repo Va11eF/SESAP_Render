@@ -85,9 +85,9 @@ app.post("/proxy/api/narratives", upload.single("transcript"), async (req, res) 
         intervieweeName: req.body.intervieweeName,
         interviewerName: req.body.interviewerName,
         interviewDate: req.body.interviewDate,
-        interviewDesc: req.body.description,
-        interviewEmbedLink: req.body.embedLinks,
-        interviewTranscript: transcriptText || req.body.interviewTranscript || "",
+        interviewDesc: req.body.interviewDesc,
+        interviewEmbedLink: req.body.interviewEmbedLink,
+        interviewTranscript: transcriptText,
       };
 
       // Example: if your backend needs the file path or filename, add it:
