@@ -6,6 +6,8 @@ const axios = require("axios");
 const path = require("path");
 const app = express();
 
+const { spawn } = require('child_process');
+
 // Ensure the "uploads" directory exists
 const uploadsDir = path.join(__dirname, "transcripts");
 if (!fs.existsSync(uploadsDir)) {
