@@ -20,14 +20,17 @@ def main():
             print(f"[ERROR] transcripts folder not found at {DATA_PATH}", flush=True)
             return
 
+        print("[DEBUG] Loading documents.", flush=True)
         documents = loadDocuments()
 
         if not documents:
             print("[WARN] No documents found in transcripts folder.", flush=True)
             return
 
+        print("[DEBUG] Splitting documents.", flush=True)
         chunks = splitDocuments(documents)
 
+        print("[DEBUG] Adding to chroma.", flush=True)
         addToChroma(chunks)
 
 
@@ -36,6 +39,7 @@ def main():
 
 def loadDocuments():
     loader = DirectoryLoader(DATA_PATH, glob="**/*.docx")
+    print("[DEBUG] loader.load() .", flush=True)
     documents = loader.load()
     return documents
 
@@ -51,13 +55,16 @@ def splitDocuments(documents: list[Document]):
 
 def addToChroma(chunks: list[Document]):
    #load existing database
+    print("[DEBUG] db is chroma.", flush=True)
     db = Chroma(
         persist_directory=CHROMA_PATH,
         embedding_function=getEmbeddings()
     )
 
+    print("[DEBUG] calculate chunks.", flush=True)
     chunkIDs = calculateChunkID(chunks)
     # add/update the documents
+    print("[DEBUG] db get.", flush=True)
     existingItems = db.get(include=[])
     existingIds = set(existingItems["ids"])
 
@@ -72,6 +79,8 @@ def addToChroma(chunks: list[Document]):
     if newChunks:
         print(f"[INFO] Adding {len(newChunks)} new documents to Chroma.", flush=True)
         newChunkID = [chunk.metadata["id"] for chunk in newChunks]
+        print("[DEBUG] About to call db.add_documents...", flush=True)
+
         db.add_documents(newChunks, ids=newChunkID)
     else:
         print("[INFO] No new documents to add.", flush=True)
@@ -92,6 +101,8 @@ def calculateChunkID(chunks):
     # Document Source : Page Number : Chunk Index
     lastPageID = None
     currentChunkIdx = 0
+
+    print("[DEBUG] Calculating chunks", flush=True)
 
     for chunk in chunks:
         source = chunk.metadata.get("source")
