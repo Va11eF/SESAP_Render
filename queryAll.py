@@ -53,8 +53,10 @@ def queryAll(transcriptFileNames):
             print(f"Skipping {filename} [results already exist.]") #avoid reprocessing
             continue
 
-        print(f"Processing: {filename}")
+        print(f"Querying LLM for {filename}...", flush=True)
         responseLLM = query_rag(filename) 
+        print(f"LLM response received for {filename}", flush=True)
+
         
         formattedResponse = formatJSON(responseLLM)
         saveResults(filename, formattedResponse)
