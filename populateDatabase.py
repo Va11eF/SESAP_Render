@@ -28,7 +28,7 @@ def main():
 
         chunks = splitDocuments(documents)
 
-        #addToChroma(chunks)
+        addToChroma(chunks)
 
 
     except Exception as e:
