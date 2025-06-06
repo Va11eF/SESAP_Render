@@ -32,11 +32,12 @@ COPY . .
 # Build frontend
 RUN npm run build
 
-# Setup Python environment
+# Setup Python environment and preload Hugging Face model
 RUN python3 -m venv /opt/venv && \
     . /opt/venv/bin/activate && \
     /opt/venv/bin/pip install --upgrade pip && \
-    /opt/venv/bin/pip install -r requirements.txt
+    /opt/venv/bin/pip install -r requirements.txt && \
+    python3 -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-mpnet-base-v2')"
 
 ENV PATH="/opt/venv/bin:$PATH"
 
