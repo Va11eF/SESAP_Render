@@ -126,7 +126,7 @@ app.post("/proxy/api/narratives", upload.single("transcript"), async (req, res) 
       );
 
 
-      //await runScript("populateDatabase.py");
+      await runScript("populateDatabase.py");
       await runScript("queryAll.py");
       await runScript("generateCharts.py");
 
