@@ -3,6 +3,7 @@ import re
 import os
 from dotenv import load_dotenv
 from queryLLM import query_rag
+print("[PYTHON] queryAll.py started", flush=True)
 
 RESULTS_PATH = "./results/"
 RESULTS_FILE = os.path.join(RESULTS_PATH, " .json")  

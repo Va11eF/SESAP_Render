@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 
+print("[PYTHON] generateCharts.py started", flush=True)
+
 # === Setup ===
 
 identities = [
